@@ -1,0 +1,204 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fswiss\fprq2\fcharset0 Arial;}{\f1\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\widctlpar\sl276\slmult1\f0\fs22\lang9 ASS 1:  to import locate load data preprocessing data formalating                                                                   \par
+import pandas as pd\par
+import numpy as np\par
+import matplotlib.pyplot as plt\par
+import sklearn.linear-model\par
+os.chdir("D:)\par
+\par
+df = pd.read_csv("train.csv")\par
+df.shape\par
+df.columns\par
+df.size\par
+df.dtypes\par
+df.isnull().sum()\par
+df.describe()\par
+df.info()\par
+df["Cabin"] = df["Cabin"].replace(to_replace=np.nan, value="unknown") \par
+df["Age"] = df["Age"].interpolate() \par
+df["Embarked"].fillna(method="ffill",inplace=True)\par
+df.isnull().sum()\par
+df["Age"] = df["Age"].astype('int64')\par
+quantitative_data = pd.get_dummies(df.Embarked,prefix = 'Embarked')\par
+df = df.join(quantitative_data) \par
+df.drop(['Embarked'],axis = 1,inplace = True)\par
+quantitative_sex = pd.get_dummies(df.Sex,prefix = 'Sex')\par
+df = df.join(quantitative_sex)df.drop(['Sex'],axis = 1,inplace = True) \par
+\par
+ASS 2:scan all varibles find outlines and apply transforemation\par
+df['club_join_date'] = df['club_join_date'].replace(to_replace=np.nan,value='2019')\par
+df['placement_offer_count']=df['placement_offer_count'].fillna('1')\par
+columns = ['math_score','reading_score','writing_score','placement_score'] \par
+df.boxplot(columns)\par
+np.where(df['math_score'] < 60)\par
+np.where(((df['placement_score'] > 75) & (df['placement_score'] <= 85))\par
+& ((df['placement_offer_count'] > 2) | (df['placement_offer_count'] < 2) ))\par
+df[(df['math_score'] < 60) | (df['math_score'] > 80)]\par
+from sklearn.preprocessing import MinMaxScaler \par
+scaling = MinMaxScaler()\par
+scaling.fit_transform(new_df2[['math_score','reading_score','writing_score','placement_score']])\par
+df.drop(columns = 'Id', inplace = True)\par
+\par
+ASS 3:to find the measures of central tendency\par
+np.mean(df['SepalLengthCm'])\par
+np.std(df)\par
+np.min(df)\par
+df.quantile(0.25)\par
+\par
+ASS 4:create a linear regression model \par
+from sklearn.datasets import load_boston \par
+boston = load_boston()\par
+print(boston)\par
+import pandas as pd\par
+import numpy as np\par
+from sklearn import linear_model\par
+from sklearn.model_selection import train_test_split\par
+df_x = pd.DataFrame(boston.data, columns=boston.feature_names)\par
+df_y = pd.DataFrame(boston.target)\par
+reg = linear_model.LinearRegression()\par
+x_train, x_test, y_train, y_test = train_test_split(df_x, df_y, test_size=0.3, random_state=42)\par
+reg.fit(x_train, y_train)\par
+print(reg.coef_)\par
+y_pred = reg.predict(x_test) \par
+print(y_pred)\par
+print(np.mean((y_pred-y_test)**2))\par
+from sklearn.metrics import mean_squared_error \par
+print(mean_squared_error(y_test,y_pred))\par
+\par
+ASS 5:implement logistic regression \par
+import pandas as pd \par
+import numpy as np \par
+import matplotlib.pyplot as plt \par
+%matplotlib inline\par
+import seaborn as sns\par
+x = df.iloc[:, [2, 3]].values x\par
+y = df.iloc[:, 4].values y\par
+from sklearn.model_selection import train_test_split x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.25, random_state = 0)\par
+x_train\par
+x_train.shape\par
+y_train\par
+y_train.shape\par
+x_test\par
+x_test.shape\par
+y_test\par
+y_test.shape\par
+from sklearn.preprocessing import StandardScaler sc_x = StandardScaler() x_train = sc_x.fit_transform(x_train) x_test = sc_x.fit_transform(x_test)\par
+from sklearn.linear_model import LogisticRegression classifier = LogisticRegression(random_state = 0) classifier.fit(x_train, y_train\par
+y_pred = classifier.predict(x_test)\par
+y_pred\par
+y_test\par
+from sklearn.metrics import confusion_matrix cm = confusion_matrix(y_test, y_pred) cm\par
+from sklearn.metrics import accuracy_score accuracy = accuracy_score(y_test, y_pred) * 100 accuracy\par
+tp = cm[0,[0]] print('True Positive : ',tp)\par
+fp = cm[0, [1]] print('False Positive : ',fp)\par
+fn = cm[1, [0]] print('False Negative : ',fn)\par
+tn = cm[1, [1]] print('True Negative : ',tn)\par
+accuracy_cm = ((tp + tn)/(tp + fp + fn + tn)) print('Accuracy : ',accuracy_cm*100)\par
+error_rate_cm = ((fp + fn)/(tp + fp + fn + tn)) print('Error Rate : ', error_rate_cm*100)\par
+precision_cm = (tp / (tp + fp)) print('Precision : ',precision_cm*100)\par
+recall_cm = (tp / (tp + fn)) print('Sensitivity : ', recall_cm*100)\par
+specificity_cm = (tn / (tn + fp)) print('Specificity : ', specificity_cm*100)\par
+\par
+Ass 6:to implimate simple matrix and buyers classifications\par
+sns.relplot(data = df, x = 'SepalWidthCm', y = 'SepalLengthCm', hue = 'Species', style = 'Species')\par
+sns.relplot(data = df, x = 'PetalLengthCm', y = 'PetalWidthCm', hue = 'Species', style = 'Species')\par
+sns.pairplot(df, hue = 'Species')\par
+plt.figure(figsize = (15, 10)) plt.subplot(2, 2, 1) sns.boxplot(data = df, x = 'Species', y = 'PetalLengthCm') plt.subplot(2, 2, 2) sns.boxplot(data = df, x = 'Species', y = 'PetalWidthCm') plt.subplot(2, 2, 3) sns.boxplot(data = df, x = 'Species', y = 'SepalLengthCm') plt.subplot(2, 2, 4) sns.boxplot(data = df, x = 'Species', y = 'SepalWidthCm')\par
+sns.boxplot(data = df).set_title("Distribution of Sepal-Length, Sepal-Width, Petal-Length and Petal-Width for iris-setos\par
+df.corr()\par
+plt.subplots(figsize = (8,8)) sns.heatmap(df.corr(), annot = True, fmt = "f").set_title("Corelation of attributes")\par
+x = df.iloc[:, 0:4].values x\par
+y = df.iloc[:, 4].values y\par
+from sklearn.preprocessing import LabelEncoder le = LabelEncoder() y = le.fit_transform(y) y\par
+from sklearn.model_selection import train_test_split x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3, random_state = 0)\par
+from sklearn.naive_bayes import GaussianNB model = GaussianNB() model.fit(x_train, y_train)\par
+\par
+Ass7:To aaply tocanization bos tagging stop words removal stemming\par
+from textblob import TextBlob import nltk\par
+b = TextBlob("I havv good spelling")\par
+b.correct()\par
+b1.sentences\par
+sentence = TextBlob("Use 4 spaces per indentation level") sentence.words\par
+sentence.words[2].singularize()\par
+sentence.words[5].pluralize()\par
+animals = TextBlob("cat dog octopus") animals.words\par
+animals.words.pluralize()\par
+sen = TextBlob("We are no longer the knights who say Ni." "We are now the knights who say Ekki ekki ekki PTANG") sen.word_counts['ekki']\par
+sen.words.count('ekki')\par
+sen.words.count('ekki', case_sensitive=True)\par
+b = TextBlob("And now for something completely different.") print(b.parse())\par
+b1[0:19] TextBlob("Beautiful is better")\par
+b1.upper()\par
+b1.find("Simple")\par
+apple_blob = TextBlob('apples') banana_blob = TextBlob('bananas') apple_blob < banana_blob\par
+blob = TextBlob("Now is better then never.") blob.ngrams(n=3)\par
+import nltk from nltk import tokenize from nltk.tokenize import sent_tokenize text = """ Good Day everyone, how are you all today? Its fun learning data analysis. Hope you all are practicing well."" Text\par
+tokenized_text = sent_tokenize(text)\par
+print(tokenized_text)\par
+from nltk.tokenize import word_tokenize tokenizer_word = word_tokenize(text) print(tokenizer_word)\par
+from nltk.probability import FreqDist fdist = FreqDist(tokenizer_word) print(fdist)\par
+fdist.most_common(4)\par
+import matplotlib.pyplot as plt fdist.plot(30,cumulative=False) plt.show()\par
+nltk.download('stopwords')\par
+from nltk.corpus import stopwords stop_words = set(stopwords.words("english")) print(stop_words)\par
+filtered_sent=[] for w in tokenizer_word: if w not in stop_words: filtered_sent.append(w) print("Tokenized sentence : ",tokenizer_word) print("Filtered sentence : ",filtered_sent)\par
+from nltk.stem import PorterStemmer from nltk.tokenize import sent_tokenize, word_tokenize ps = PorterStemmer() stemmed_words = [] for w in filtered_sent: stemmed_words.append(ps.stem(w)) print("Filtered Sentence : ", filtered_sent) print("Stemmed Sentence : ", stemmed_words)\par
+nltk.download('wordnet')\par
+from nltk.stem.wordnet import WordNetLemmatizer lem = WordNetLemmatizer() from nltk.stem.porter import PorterStemmer stem = PorterStemmer() word = "flying" print("Lemmatizer Word : ", lem.lemmatize(word, "v")) print("Stemmed Word : ", stem.stem(word))\par
+sent = "Albert Einstien was born in Ulm, Germany in 1879." tokens = nltk.word_tokenize(sent) print(tokens)\par
+nltk.download('averaged_perceptron_tagger')\par
+nltk.pos_tag(tokens)\par
+from collections import Counter sentence = "Texas A&M University is located in Texas" term_frequency = Counter(sentence.split())\par
+term_frequency\par
+\par
+Ass8:to check the price of tickit using histogram\par
+import seaborn as sns sns.distplot(df['Pclass'])\par
+sns.distplot(df['Age'])\par
+sns.distplot(df['Age'], bins=40)\par
+sns.distplot(df['Age'], bins=20, kde=False, rug=True)\par
+\par
+sns.jointplot(x = df['Age'], y = df['Fare'], kind = 'scatter')\par
+sns.jointplot(x = df['Age'], y = df['Fare'], kind = 'hex')\par
+sns.pairplot(df)\par
+sns.barplot(x = df['Sex'], y = df['Fare'])\par
+sns.countplot(df['Pclass'])\par
+sns.distplot(df['Fare'], hist = True)\par
+\par
+Ass9:about titanic statstics\par
+sns.countplot(df['Sex'])\par
+sns.countplot(df['Survived'])\par
+df['Sex'].value_counts().plot(kind = 'pie', autopct = '%.2f')\par
+df['Survived'].value_counts().plot(kind = 'pie', autopct = '%.2f')\par
+sns.barplot(df['Survived'], df['Age'])\par
+sns.barplot(df['Sex'], df['Survived'])\par
+sns.barplot(df['Sex'],df['Age'], hue = df['Survived'])\par
+sns.boxplot(df['Sex'], df['Age'])\par
+sns.boxplot(df['Sex'], df['Age'], df['Survived'])\par
+pd.crosstab(df['Sex'], df['Survived'])\par
+pd.crosstab(df['Age'], df['Survived'])\par
+sns.heatmap(pd.crosstab(df['Sex'], df['Survived']))\par
+sns.heatmap(pd.crosstab(df['Age'], df['Survived']))\par
+sns.clustermap(pd.crosstab(df['Sex'], df['Survived']))b\par
+sns.clustermap(pd.crosstab(df['Age'], df['Survived']))\par
+\par
+Ass11:hadoop\par
+package org.myorg; import java.io.IOException; import java.util.*; import org.apache.hadoop.fs.Path; import org.apache.hadoop.conf.*; import org.apache.hadoop.io.*; import org.apache.hadoop.mapreduce.*; import org.apache.hadoop.mapreduce.lib.input.FileInputFormat; import org.apache.hadoop.mapreduce.lib.input.TextInputFormat; import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat; import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat; public class WordCount \{ public static class Map extends Mapper \{ private final static IntWritable one = new IntWritable(1); private Text word = new Text(); public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException \{ String line = value.toString(); StringTokenizer tokenizer = new StringTokenizer(line); while (tokenizer.hasMoreTokens()) \{ word.set(tokenizer.nextToken()); context.write(word, one); \} \} \} public static class Reduce extends Reducer \{ public void reduce(Text key, Iterable values, Context context) throws IOException, InterruptedException \{ int sum = 0; for (IntWritable val : values) \{ sum += val.get(); \} context.write(key, new IntWritable(sum)); \} \} $ bin/hadoop com.sun.tools.javac.Main WordCount.java $ jar cf wc.jar WordCount*.class $ bin/hadoop fs -ls /user/wordcount/input/ /user/wordcount/input/file01 /user/wordcount/input/file02 public static void main(String[] args) throws Exception \{ Configuration conf = new Configuration(); Job job = new Job(conf, "wordcount"); job.setOutputKeyClass(Text.class); job.setOutputValueClass(IntWritable.class); job.setMapperClass(Map.class); job.setReducerClass(Reduce.class); job.setInputFormatClass(TextInputFormat.class); job.setOutputFormatClass(TextOutputFormat.class); FileInputFormat.addInputPath(job, new Path(args[0])); FileOutputFormat.setOutputPath(job, new Path(args[1])); job.waitForCompletion(true); \}\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+
+\pard\widctlpar\sl276\slmult1\tx5410\tab\par
+\par
+
+\pard\sa200\sl276\slmult1\f1\par
+}
+ 
